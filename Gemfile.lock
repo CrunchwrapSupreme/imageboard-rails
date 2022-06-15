@@ -85,7 +85,6 @@ GEM
     digest (3.1.0)
     erubi (1.10.0)
     erubis (2.7.0)
-    ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
     haml (5.2.2)
@@ -197,14 +196,6 @@ GEM
     rspec-support (3.11.0)
     ruby_parser (3.19.1)
       sexp_processor (~> 4.16)
-    sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc-rails (2.1.2)
-      railties (>= 4.0.0)
-      sassc (>= 2.0)
-      sprockets (> 3.0)
-      sprockets-rails
-      tilt
     sexp_processor (4.16.1)
     spring (4.0.0)
     sprockets (4.0.3)
@@ -217,6 +208,8 @@ GEM
     stimulus-rails (1.0.4)
       railties (>= 6.0.0)
     strscan (3.0.3)
+    tailwindcss-rails (2.0.8-x86_64-darwin)
+      railties (>= 6.0.0)
     temple (0.8.2)
     thor (1.2.1)
     tilt (2.0.10)
@@ -258,10 +251,10 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.3)
   rspec-rails
-  sassc-rails
   spring
   sprockets-rails
   stimulus-rails
+  tailwindcss-rails
   turbo-rails
   tzinfo-data
   web-console

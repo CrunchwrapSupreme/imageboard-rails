@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .actions {
+        @apply block my-4 font-sans;
+    }
+
+    .field {
+        @apply block my-4 font-sans;
+    }
+
+    .form_panel {
+        @apply w-fit block mx-auto my-4;
+    }
+
+    a {
+        @apply text-indigo-500 hover:text-indigo-300;
+    }
+
+    h1 {
+        @apply font-mono text-3xl;
+    }
+
+    h2 {
+        @apply font-mono text-xl;
+    }
+
+    input[type="submit"] {
+        @apply drop-shadow-md bg-indigo-400 rounded px-3 py-2 hover:bg-indigo-300 hover:cursor-pointer;
+    }
+
+    input[type="checkbox"] {
+        @apply hover:cursor-pointer;
+    }
+
+    code {
+        @apply font-mono;
+    }
+
+    #error_explanation h2 {
+        @apply text-red-500 text-lg;
+    }
+
+    #error_explanation li {
+        @apply text-red-500;
+    }
+}

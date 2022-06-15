@@ -1,0 +1,6 @@
+%header.block.px-4.py-4
+  .container
+    %h1 Rails Imageboard
+  %nav
+    - if user_signed_in?
+      = link_to 'Sign out', sign_out_path, data: { "turbo-method": :delete }

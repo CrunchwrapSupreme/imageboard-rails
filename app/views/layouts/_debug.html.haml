@@ -1,0 +1,6 @@
+- if Rails.env.development?
+  .w-fit.block.mx-auto.text-center
+    %h2.font-mono.text-xl Debug
+    .bg-indigo-100.h-max.px-4.py-4
+      = debug(params)
+      = debug_console(yield(:debug_object))
