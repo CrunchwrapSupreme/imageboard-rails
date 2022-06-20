@@ -4,7 +4,7 @@ module ApplicationHelper
     if title.empty?
       base
     else
-      "#{title} | #{base}"
+      CGI.escapeHTML("#{title} | #{base}")
     end
   end
 
@@ -12,5 +12,9 @@ module ApplicationHelper
     return if object.nil? || object.empty?
 
     debug(object)
+  end
+
+  def min_role?(role)
+    !!current_user&.min_role?(role)
   end
 end

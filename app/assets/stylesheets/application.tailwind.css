@@ -11,6 +11,14 @@
         @apply block my-4 font-sans;
     }
 
+    .alert.alert-notice {
+        @apply bg-indigo-100 rounded my-2 py-2 px-6 w-full;
+    }
+
+    .alert.alert-danger {
+        @apply bg-red-300 rounded my-2 py-2 px-6 w-full;
+    }
+
     .form_panel {
         @apply w-fit block mx-auto my-4;
     }
@@ -24,7 +32,7 @@
     }
 
     h2 {
-        @apply font-mono text-xl;
+        @apply font-mono text-xl text-center;
     }
 
     input[type="submit"] {

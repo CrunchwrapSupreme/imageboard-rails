@@ -1,0 +1,5 @@
+- provide(:title, "Editing #{@board.slash_name}")
+.form_panel
+  %h2 Editing #{@board.slash_name} - #{@board.name}
+  = form_with url: board_path(@board.short_name), method: 'put', local: true, scope: :board do |f|
+    = render partial: 'form_controls', locals: { board: @board, form: f }

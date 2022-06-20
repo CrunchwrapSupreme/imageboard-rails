@@ -1,16 +1,14 @@
-class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
-  devise :database_authenticatable, :confirmable, :lockable, :timeoutable,
-         :recoverable, :rememberable, :validatable, :trackable
-
+class BoardRole < ApplicationRecord
+  belongs_to :board
+  belongs_to :user
+  validates :user_id, presence: true
+  validates :board_id, presence: true
   validates :role, presence: true
-  has_many :board_roles, class_name: 'BoardRole', dependent: :delete_all
-  has_many :boards, through: :board_roles
 
+  OWNER = 3
+  ADMIN = 2
+  MODERATOR = 1
   USER = 0
-  DAEMON = 1
-  OWNER = 2
 
   def role=(role)
     ensure_role!(role)
@@ -30,8 +28,9 @@ class User < ApplicationRecord
 
   def role_hash
     {
+      admin: ADMIN,
+      moderator: MODERATOR,
       owner: OWNER,
-      daemon: DAEMON,
       user: USER
     }
   end

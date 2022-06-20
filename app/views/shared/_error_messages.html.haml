@@ -1,0 +1,5 @@
+- unless object.valid?
+  %ul
+    - object.errors.full_messages.each do |msg|
+      %li.alert.alert-danger
+        = msg

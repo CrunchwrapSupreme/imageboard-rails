@@ -1,6 +1,14 @@
-%header.block.px-4.py-4
-  .container
-    %h1 Rails Imageboard
-  %nav
-    - if user_signed_in?
-      = link_to 'Sign out', sign_out_path, data: { "turbo-method": :delete }
+%header.block.px-8.py-4.flex.flex-row
+  %h1{class: ['basis-1/4']}
+    = link_to "Rails Imageboard", root_path
+  %nav{class: ['basis-3/4', 'flex', 'justify-end']}
+    %ul
+      - if min_role?(:daemon)
+        %li.px-2.inline-block
+          = link_to 'Manage Site'
+      - if min_board_role?(:moderator)
+        %li.px-2.inline-block
+          = link_to 'Manage Board'
+      %li.px-2.inline-block
+        - if user_signed_in?
+          = link_to 'Sign out', sign_out_path, data: { "turbo-method": :delete }

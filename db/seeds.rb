@@ -8,3 +8,6 @@
 user = User.new(email: 'tester@test.com', password: 'password', password_confirmation: 'password')
 user.skip_confirmation!
 user.save!
+
+board = Board.new(short_name: 'v', name: 'Video Games', description: 'Video game related content and discussion')
+board.save!

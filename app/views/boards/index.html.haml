@@ -1,0 +1,5 @@
+- provide(:title, 'Boards')
+.form_panel
+  %h2 Boards
+  - @boards.each do |b|
+    = link_to b.slash_name, board_path(b.short_name)

@@ -1,0 +1,5 @@
+- provide(:title, "New Board")
+.form_panel
+  %h2 New Board
+  = form_with model: @board, local: true do |f|
+    = render partial: 'form_controls', locals: { board: f.object, form: f }
