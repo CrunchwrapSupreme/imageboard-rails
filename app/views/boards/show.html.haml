@@ -1,5 +1,9 @@
 - provide(:title, @board.slash_name)
 .form_panel
   %h2 #{@board.slash_name} - #{@board.name}
-  %p
+  %p.text-center
     = @board.description
+  .form_panel
+    = render partial: 'comment_threads/new_thread_form', locals: { board: @board, thread: @new_thread, comment: @new_comment }
+  .grid.justify-items-stretch.grid-cols-3.gap-4.my-8
+    = render partial: 'boards/thread_thumbnail', collection: @threads.map(&:heading_post), locals: { board: @board }

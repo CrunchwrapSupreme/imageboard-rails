@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_16_053958) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_23_203443) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -34,6 +34,29 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_053958) do
     t.index ["short_name"], name: "index_boards_on_short_name", unique: true
   end
 
+  create_table "comment_threads", force: :cascade do |t|
+    t.boolean "sticky", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "bump_count", default: 0, null: false
+    t.datetime "last_bump"
+    t.bigint "board_id", null: false
+    t.index ["board_id"], name: "index_comment_threads_on_board_id"
+    t.index ["last_bump"], name: "index_comment_threads_on_last_bump"
+  end
+
+  create_table "comments", force: :cascade do |t|
+    t.string "content", limit: 1024, null: false
+    t.boolean "anonymous", default: true, null: false
+    t.string "anon_name"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "comment_thread_id"
+    t.index ["comment_thread_id"], name: "index_comments_on_comment_thread_id"
+    t.index ["user_id"], name: "index_comments_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -55,6 +78,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_053958) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "role", default: 0, null: false
+    t.string "username"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -63,4 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_16_053958) do
 
   add_foreign_key "board_roles", "boards", on_delete: :cascade
   add_foreign_key "board_roles", "users", on_delete: :cascade
+  add_foreign_key "comment_threads", "boards", on_delete: :cascade
+  add_foreign_key "comments", "comment_threads"
+  add_foreign_key "comments", "users", on_delete: :cascade
 end

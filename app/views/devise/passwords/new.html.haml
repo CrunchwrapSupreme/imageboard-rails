@@ -6,7 +6,7 @@
     .field
       = f.label :email
       %br/
-      = f.email_field :email, autofocus: true, autocomplete: "email"
+      = f.email_field :email, autofocus: true, autocomplete: "email", class: ['form-field']
     .actions
       = f.submit "Send me reset password instructions"
   = render "devise/shared/links"

@@ -12,8 +12,9 @@
   %body
     = render 'layouts/header'
     %div.container.w-screen.mx-auto
-      .form_panel
-        - flash.each do |message_type, message|
-          = content_tag(:div, message, class: "alert alert-#{message_type}")
+      - unless flash.empty?
+        .form_panel
+          - flash.each do |message_type, message|
+            = content_tag(:div, message, class: "alert alert-#{message_type}")
       = yield
       = render 'layouts/debug'

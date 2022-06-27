@@ -5,8 +5,11 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable, :trackable
 
   validates :role, presence: true
-  has_many :board_roles, class_name: 'BoardRole', dependent: :delete_all
+  validates :username, presence: true, length: { minimum: 1, maximum: 12 }
+
+  has_many :board_roles, class_name: 'BoardRole', dependent: :destroy
   has_many :boards, through: :board_roles
+  has_many :comments
 
   USER = 0
   DAEMON = 1

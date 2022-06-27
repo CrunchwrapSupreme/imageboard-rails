@@ -32,20 +32,20 @@ RSpec.describe BoardsController, type: :request do
       test_user.role = :daemon
       test_user.save
       sign_in(test_user)
-      get edit_board_url(test_board.short_name)
+      get edit_board_url(test_board)
       expect(response).to have_http_status(:ok)
     end
 
     it 'should be accessible by board moderators' do
       test_board.set_role(test_user, :moderator)
       sign_in(test_user)
-      get edit_board_url(test_board.short_name)
+      get edit_board_url(test_board)
       expect(response).to have_http_status(:ok)
     end
 
     it 'should not be accessible by regular users' do
       sign_in(test_user)
-      get edit_board_url(test_board.short_name)
+      get edit_board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Unauthorized')
@@ -54,13 +54,13 @@ RSpec.describe BoardsController, type: :request do
 
   describe 'GET #show' do
     it 'should be accessible by non-users and users alike' do
-      get board_url(test_board.short_name)
+      get board_url(test_board)
       expect(response).to have_http_status(:ok)
       sign_in(test_user)
-      get board_url(test_board.short_name)
+      get board_url(test_board)
       expect(response).to have_http_status(:ok)
 
-      get "#{board_url(test_board.short_name)}.json"
+      get "#{board_url(test_board)}.json"
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Video Games')
       expect { JSON.parse(response.body) }.not_to raise_exception
@@ -70,7 +70,7 @@ RSpec.describe BoardsController, type: :request do
   describe 'GET #new' do
     it 'should not be accessible by regular users' do
       sign_in(test_user)
-      get new_board_url(test_board.short_name)
+      get new_board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Unauthorized')
@@ -80,7 +80,7 @@ RSpec.describe BoardsController, type: :request do
       test_user.role = :daemon
       test_user.save
       sign_in(test_user)
-      get new_board_url(test_board.short_name)
+      get new_board_url(test_board)
       expect(response).to have_http_status(:ok)
     end
   end
@@ -108,7 +108,7 @@ RSpec.describe BoardsController, type: :request do
   describe 'PUT #update' do
     it 'should not be edited by regular users' do
       sign_in(test_user)
-      put board_url(test_board.short_name), params: {
+      put board_url(test_board), params: {
             board: {
               short_name: 'c',
               name: 'cart',
@@ -123,7 +123,7 @@ RSpec.describe BoardsController, type: :request do
     it 'should be edited by board moderators' do
       test_board.set_role(test_user, :moderator)
       sign_in(test_user)
-      put board_url(test_board.short_name), params: {
+      put board_url(test_board), params: {
             board: {
               short_name: 'c',
               name: 'cart',
@@ -143,7 +143,7 @@ RSpec.describe BoardsController, type: :request do
   describe 'DELETE #destroy' do
     it 'should not be deleted by regular users' do
       sign_in(test_user)
-      delete board_url(test_board.short_name)
+      delete board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Unauthorized')
@@ -152,7 +152,7 @@ RSpec.describe BoardsController, type: :request do
     it 'should be deleted by board owner' do
       test_board.set_role(test_user, :owner)
       sign_in(test_user)
-      delete board_url(test_board.short_name)
+      delete board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Board deleted')

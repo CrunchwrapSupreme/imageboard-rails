@@ -4,18 +4,22 @@
   .field
     = f.label :email
     %br/
-    = f.email_field :email, autofocus: true, autocomplete: "email"
+    = f.email_field :email, autofocus: true, autocomplete: "email", class: ['form-field']
+  .field
+    = f.label :username
+    %br/
+    = f.text_field :username, class: ['form-field']
   .field
     = f.label :password
     - if @minimum_password_length
       %em
         (#{@minimum_password_length} characters minimum)
     %br/
-    = f.password_field :password, autocomplete: "new-password"
+    = f.password_field :password, autocomplete: "new-password", class: ['form-field']
   .field
     = f.label :password_confirmation
     %br/
-    = f.password_field :password_confirmation, autocomplete: "new-password"
+    = f.password_field :password_confirmation, autocomplete: "new-password", class: ['form-field']
   .actions
     = f.submit "Sign up"
 = render "devise/shared/links"

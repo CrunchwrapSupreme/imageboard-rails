@@ -2,4 +2,4 @@
 .form_panel
   %h2 Boards
   - @boards.each do |b|
-    = link_to b.slash_name, board_path(b.short_name)
+    = link_to b.slash_name, board_path(b), class: ['form-link']

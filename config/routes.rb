@@ -1,5 +1,10 @@
 Rails.application.routes.draw do
-  resources :boards, param: :short_name
+  resources :boards, param: :short_name do
+    resources :comment_threads, only: [:show, :create, :destroy], path: 'threads' do
+      shallow { resources :comments, only: [:destroy, :create] }
+    end
+  end
+
   devise_for :users, skip: [:registrations]
   devise_scope :user do
     get    'sign_in',  to: 'users/sessions#new'

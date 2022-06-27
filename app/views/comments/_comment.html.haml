@@ -1,0 +1,11 @@
+.grid.grid-cols-3.gap-2.justify-around.py-8
+  .font-mono.text-sm.text-left
+    = "ID #{comment.username}"
+  .font-mono.text-sm.inline
+    - if users_comment?(comment) && !comment.first_comment?
+      = link_to 'Delete', comment_path(comment), data: { "turbo-method": :delete }
+  .font-mono.text-sm.text-right
+    = "#{time_ago_in_words(comment.created_at)} ago"
+  .col-span-3
+    %p
+      = comment.content

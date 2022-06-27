@@ -7,32 +7,45 @@
         @apply block my-4 font-sans;
     }
 
-    .field {
-        @apply block my-4 font-sans;
-    }
-
-    .alert.alert-notice {
-        @apply bg-indigo-100 rounded my-2 py-2 px-6 w-full;
-    }
-
-    .alert.alert-danger {
-        @apply bg-red-300 rounded my-2 py-2 px-6 w-full;
-    }
-
-    .form_panel {
-        @apply w-fit block mx-auto my-4;
-    }
-
-    a {
-        @apply text-indigo-500 hover:text-indigo-300;
-    }
-
     h1 {
         @apply font-mono text-3xl;
     }
 
     h2 {
         @apply font-mono text-xl text-center;
+    }
+
+    h3 {
+        @apply font-mono text-lg text-center;
+    }
+
+    p {
+        @apply font-sans;
+    }
+
+    .field {
+        @apply block my-4 font-sans;
+    }
+
+    .alert.alert-notice {
+        @apply bg-indigo-100 rounded my-2 py-1 px-6 w-full;
+    }
+
+    .alert.alert-danger {
+        @apply bg-red-300 rounded my-2 py-1 px-6 w-full;
+    }
+
+    .form_panel {
+        @apply w-fit block mx-auto my-4;
+    }
+
+    a.form-link {
+        @apply text-indigo-500 hover:text-indigo-300;
+    }
+
+    .form-field {
+        @apply rounded border w-full;
+        resize: none;
     }
 
     input[type="submit"] {

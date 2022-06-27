@@ -124,6 +124,11 @@ GEM
     importmap-rails (1.1.0)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    interactor (3.1.2)
+    interactor-rails (2.2.1)
+      interactor (~> 3.0)
+      rails (>= 4.2)
+    json (2.6.2)
     loofah (2.18.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -192,6 +197,8 @@ GEM
       thor (~> 1.0)
       zeitwerk (~> 2.5)
     rake (13.0.6)
+    recaptcha (5.10.0)
+      json
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.0.1)
@@ -269,11 +276,13 @@ DEPENDENCIES
   faker
   haml-rails
   importmap-rails
+  interactor-rails (~> 2.0)
   pg (~> 1.1)
   pry
   pry-doc
   puma (~> 5.0)
   rails (~> 7.0.3)
+  recaptcha
   rspec-rails
   spring
   sprockets-rails

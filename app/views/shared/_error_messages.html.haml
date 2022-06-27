@@ -1,4 +1,4 @@
-- unless object.valid?
+- if object.errors.any?
   %ul
     - object.errors.full_messages.each do |msg|
       %li.alert.alert-danger

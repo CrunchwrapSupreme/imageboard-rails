@@ -1,0 +1,6 @@
+.px-4.flex.items-stretch.flex-col
+  %p.block
+    = link_to thread_thumbnail.abridged, board_comment_thread_path(board, thread_thumbnail.comment_thread)
+  .flex.flex-wrap.py-2.grow
+    %p.font-mono.text-sm.text-left.inline-block.grow.self-end #{thread_thumbnail.username}
+    %p.font-mono.text-sm.inline-block.self-end #{thread_thumbnail.creation_date}

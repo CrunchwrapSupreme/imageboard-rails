@@ -25,6 +25,9 @@ class BoardsController < ApplicationController
   end
 
   def show
+    @new_thread = @board.threads.build
+    @new_comment = @new_thread.comments.build
+    @threads = @board.threads.feed.decorate
     respond_to do |format|
       format.html
       format.json { render json: @board.to_json }
@@ -34,28 +37,23 @@ class BoardsController < ApplicationController
   def create
     @board = Board.new(board_params).decorate
     if @board.save
-      flash[:notice] = 'Successfully created board'
-      redirect_to board_url(@board.short_name)
+      redirect_to board_url(@board), notice: 'Successfully created board'
     else
-      flash.now[:danger] = 'Invalid board settings'
-      render 'new'
+      render 'new', status: :unprocessable_entity, alert: 'Invalid board settings'
     end
   end
 
   def update
     if @board.update(update_params)
-      flash[:notice] = 'Successfully updated board'
-      redirect_to board_url(@board.short_name)
+      redirect_to board_url(@board), notice: 'Successfully updated board'
     else
-      flash.now[:danger] = 'Invalid board settings'
-      render 'edit'
+      render 'edit', status: :unprocessable_entity, alert: 'Invalid board settings'
     end
   end
 
   def destroy
     @board.destroy
-    flash[:success] = 'Board deleted'
-    redirect_to boards_url
+    redirect_to boards_url, notice: 'Board deleted', status: :see_other
   end
 
   private

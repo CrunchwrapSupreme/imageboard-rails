@@ -3,10 +3,11 @@ FactoryBot.define do
     email { 'tester@test.com' }
     password { 'password1' }
     password_confirmation { 'password1' }
+    username { 'testerson' }
     before(:create, &:skip_confirmation!)
 
     trait :daemon do
-      before(:create, role: :daemon)
+      before(:create) { |user| user.role = :daemon }
     end
 
     trait :owner do
