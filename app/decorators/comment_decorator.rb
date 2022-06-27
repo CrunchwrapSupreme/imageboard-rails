@@ -3,9 +3,9 @@ class CommentDecorator < ApplicationDecorator
 
   def username
     if model.anonymous
-      model.anon_name
+      "Anon #{model.anon_name}"
     else
-      model.user.username
+      "u/#{model.user.username}"
     end
   end
 

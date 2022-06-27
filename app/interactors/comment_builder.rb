@@ -6,6 +6,7 @@ class CommentBuilder
       context.thread.touch if context.thread.persisted?
       context.thread.save!
       context.comment = context.thread.comments.build(build_comment_attribs)
+      context.comment.image_derivatives!
       context.comment.save!
     end
   rescue ActiveRecord::RecordInvalid => e
@@ -17,13 +18,15 @@ class CommentBuilder
       {
         user: context.user,
         anonymous: false,
-        content: context.content
+        content: context.content,
+        image: context.image
       }
     else
       {
         anonymous: true,
         content: context.content,
-        anon_name: context.anon_name
+        anon_name: context.anon_name,
+        image: context.image
       }
     end
   end

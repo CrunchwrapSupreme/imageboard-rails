@@ -20,12 +20,13 @@ class CommentsController < ApplicationController
   end
 
   def create
-    param = params.require(:comment).permit(:content)
+    param = params.require(:comment).permit(:content, :image)
     result = CommentBuilder.call(user: current_user,
                                  thread: @thread,
                                  anon_name: current_anon_name,
                                  board: @board,
-                                 content: param[:content])
+                                 content: param[:content],
+                                 image: param[:image])
 
     if result.success?
       redirect_to board_comment_thread_path(@board, @thread), notice: 'Comment created succesfully'

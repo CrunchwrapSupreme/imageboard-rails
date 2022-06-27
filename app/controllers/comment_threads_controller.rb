@@ -18,15 +18,16 @@ class CommentThreadsController < ApplicationController
                                  thread: thread,
                                  anon_name: current_anon_name,
                                  board: current_board,
-                                 content: c_params.dig(:comment, :content))
+                                 content: c_params.dig(:comment, :content),
+                                 image: c_params.dig(:comment, :image))
 
     if result.success?
       redirect_to board_comment_thread_url(current_board, result.thread), notice: 'Thread created succesfully'
     else
-      @thread = result.thread.decorate
-      @comment = result.comment.decorate
+      @new_thread = thread.decorate
+      @new_comment = result.comment.decorate
       @threads = current_board.threads.feed.decorate
-      @board = current_board
+      @board = current_board.decorate
       render 'boards/show', status: :unprocessable_entity, alert: 'Thread failed to create'
     end
   end
@@ -43,9 +44,9 @@ class CommentThreadsController < ApplicationController
 
   def comment_thread_params
     if has_roles?(user: :daemon, board: :admin)
-      params.permit(comment_thread: [:sticky], comment: [:content])
+      params.permit(comment_thread: [:sticky], comment: [:content, :image])
     else
-      params.permit(comment: [:content])
+      params.permit(comment: [:content, :image])
     end
   end
 

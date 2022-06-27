@@ -1,10 +1,13 @@
 = render 'shared/error_messages', object: thread
 = render 'shared/error_messages', object: comment
 .flex.justify-center
-  = form_with model: comment, url: [board, thread, comment], local: true do |f|
+  = form_with model: comment, url: [board, thread, comment], local: true, multipart: true do |f|
     .field
       = f.label :content, 'New Comment'
       %br/
       = f.text_area :content, cols: 60, rows: 5, class: ['form-field']
-    .actions
+    .field.inline-block
+      = f.hidden_field(:image, value: comment.cached_image_data) if comment.cached_image_data
+      = f.file_field :image
+    .actions.inline-block
       = f.submit 'Submit'

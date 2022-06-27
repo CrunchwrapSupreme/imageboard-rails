@@ -6,6 +6,7 @@
       = link_to 'Delete', comment_path(comment), data: { "turbo-method": :delete }
   .font-mono.text-sm.text-right
     = "#{time_ago_in_words(comment.created_at)} ago"
-  .col-span-3
-    %p
+  .col-span-3.flex.flex-row
+    = comment_thumbnail_for(comment)
+    %p.inline.px-4.py-4
       = comment.content

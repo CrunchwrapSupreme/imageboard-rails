@@ -1,4 +1,7 @@
 class Comment < ApplicationRecord
+  include ImageUploader::Attachment(:image)
+
+  validates_presence_of :image
   validates :content, length: { minimum: 3, maximum: 1024 }, presence: true
   validates :anon_name, presence: true, length: { is: 12 }, if: -> { anonymous == true }
   validates :comment_thread_id, presence: true

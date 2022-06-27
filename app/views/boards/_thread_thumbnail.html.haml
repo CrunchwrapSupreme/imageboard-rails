@@ -1,6 +1,8 @@
 .px-4.flex.items-stretch.flex-col
-  %p.block
-    = link_to thread_thumbnail.abridged, board_comment_thread_path(board, thread_thumbnail.comment_thread)
-  .flex.flex-wrap.py-2.grow
-    %p.font-mono.text-sm.text-left.inline-block.grow.self-end #{thread_thumbnail.username}
-    %p.font-mono.text-sm.inline-block.self-end #{thread_thumbnail.creation_date}
+  = thumbnail_for(comment: thread_thumbnail, board: board)
+  %h3.text-sm #{pluralize(thread_thumbnail.comment_thread.comments.count, 'Reply')}
+  %p.block.grow.px-4
+    = thread_link(comment: thread_thumbnail, board: board, content: thread_thumbnail.abridged)
+  .flex.flex-wrap.py-2
+    %p.font-mono.text-sm.text-left.inline-block.grow #{thread_thumbnail.username}
+    %p.font-mono.text-sm.inline-block #{thread_thumbnail.creation_date}
