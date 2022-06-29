@@ -7,7 +7,7 @@ class Comment < ApplicationRecord
   validates :comment_thread_id, presence: true
   validates :user_id, presence: true, if: -> { anonymous == false }
 
-  belongs_to :comment_thread, touch: true
+  belongs_to :comment_thread, touch: true, counter_cache: true
   belongs_to :user, optional: true
 
   scope :most_recent_first, -> { order('created_at DESC') }

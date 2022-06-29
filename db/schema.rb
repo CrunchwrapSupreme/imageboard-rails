@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_06_27_110402) do
+ActiveRecord::Schema[7.0].define(version: 2022_06_29_223229) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -41,6 +41,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_06_27_110402) do
     t.integer "bump_count", default: 0, null: false
     t.datetime "last_bump"
     t.bigint "board_id", null: false
+    t.integer "comments_count"
     t.index ["board_id"], name: "index_comment_threads_on_board_id"
     t.index ["last_bump"], name: "index_comment_threads_on_last_bump"
   end
