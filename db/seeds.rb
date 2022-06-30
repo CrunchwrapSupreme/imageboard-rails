@@ -5,7 +5,8 @@
 #
 #   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
 #   Character.create(name: "Luke", movie: movies.first)
-user = User.new(email: 'tester@test.com', password: 'password', password_confirmation: 'password', username: 'testtesttest')
+user = User.new(email: 'tester@test.com', password: 'password', password_confirmation: 'password',
+                username: 'testtesttest')
 user.skip_confirmation!
 user.save!
 
@@ -20,6 +21,5 @@ board = Board.first
                    anonymous: false,
                    user: User.first,
                    comment_thread: cthread)
-
   end
 end

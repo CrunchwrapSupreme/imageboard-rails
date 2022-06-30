@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Comments", type: :request do
+RSpec.describe 'Comments', type: :request do
   # describe "GET /destroy" do
   #   it "returns http success" do
   #     get "/comments/destroy"

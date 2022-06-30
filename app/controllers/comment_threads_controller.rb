@@ -1,6 +1,6 @@
 class CommentThreadsController < BoardsBaseController
   before_action :redirect_unless_board
-  before_action :redirect_unless_thread, only: [:show, :destroy]
+  before_action :redirect_unless_thread, only: %i[show destroy]
   before_action :redirect_unless_daemon_or_board_admin, only: [:destroy]
 
   def show
@@ -44,9 +44,9 @@ class CommentThreadsController < BoardsBaseController
 
   def comment_thread_params
     if roles?(user: :daemon, board: :admin)
-      params.permit(comment_thread: [:sticky], comment: [:content, :image])
+      params.permit(comment_thread: [:sticky], comment: %i[content image])
     else
-      params.permit(comment: [:content, :image])
+      params.permit(comment: %i[content image])
     end
   end
 

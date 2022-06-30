@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   resources :boards, param: :short_name do
-    resources :comment_threads, only: [:show, :create, :destroy], path: 'threads' do
-      shallow { resources :comments, only: [:destroy, :create] }
+    resources :comment_threads, only: %i[show create destroy], path: 'threads' do
+      shallow { resources :comments, only: %i[destroy create] }
     end
   end
 

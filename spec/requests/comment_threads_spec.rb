@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "CommentThreads", type: :request do
+RSpec.describe 'CommentThreads', type: :request do
   let(:board) { create(:board, short_name: 'tst') }
   let(:thread) { create(:comment_thread, board: board) }
   let(:user) { create(:user, :daemon) }

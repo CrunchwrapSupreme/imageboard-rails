@@ -1,9 +1,9 @@
 class BoardsController < BoardsBaseController
-  before_action :redirect_unless_board,         only: [:edit, :show, :update, :destroy]
-  before_action :authenticate_user!,            only: [:edit, :destroy, :create, :update, :new]
-  before_action :require_daemon_or_board_mod,   only: [:edit, :update]
+  before_action :redirect_unless_board,         only: %i[edit show update destroy]
+  before_action :authenticate_user!,            only: %i[edit destroy create update new]
+  before_action :require_daemon_or_board_mod,   only: %i[edit update]
   before_action :require_daemon_or_board_owner, only: [:destroy]
-  before_action :require_daemon,                only: [:create, :new]
+  before_action :require_daemon,                only: %i[create new]
 
   def new
     @board = Board.new.decorate

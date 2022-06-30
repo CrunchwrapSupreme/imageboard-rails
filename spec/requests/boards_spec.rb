@@ -109,12 +109,12 @@ RSpec.describe BoardsController, type: :request do
     it 'should not be edited by regular users' do
       sign_in(test_user)
       put board_url(test_board), params: {
-            board: {
-              short_name: 'c',
-              name: 'cart',
-              description: 'test'
-            }
-          }
+        board: {
+          short_name: 'c',
+          name: 'cart',
+          description: 'test'
+        }
+      }
       follow_redirect!
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Unauthorized')
@@ -124,12 +124,12 @@ RSpec.describe BoardsController, type: :request do
       test_board.set_role(test_user, :moderator)
       sign_in(test_user)
       put board_url(test_board), params: {
-            board: {
-              short_name: 'c',
-              name: 'cart',
-              description: 'test'
-            }
-          }
+        board: {
+          short_name: 'c',
+          name: 'cart',
+          description: 'test'
+        }
+      }
       follow_redirect!
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('Successfully updated board')
