@@ -3,8 +3,6 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
 
-gem 'image_processing', '~> 1.8'
-
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 7.0.3'
 
@@ -41,19 +39,15 @@ gem 'bootsnap', require: false
 # Use Sass to process CSS
 # gem "sassc-rails"
 
+gem 'image_processing', '~> 1.8'
 gem 'tailwindcss-rails'
-
 gem 'haml-rails'
-
 gem 'devise'
-
 gem 'draper'
-
 gem 'recaptcha', require: 'recaptcha/rails'
-
 gem 'interactor-rails', '~> 2.0'
-
 gem 'shrine', '~> 3.0'
+gem "sidekiq", "~> 6.5"
 
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
