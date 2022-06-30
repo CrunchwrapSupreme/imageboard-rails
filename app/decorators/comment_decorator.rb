@@ -9,10 +9,6 @@ class CommentDecorator < ApplicationDecorator
     end
   end
 
-  def first_comment?
-    model.comment_thread.comments.first.eql?(model)
-  end
-
   def abridged
     model.content.truncate(200)
   end

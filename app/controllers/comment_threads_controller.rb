@@ -1,11 +1,11 @@
-class CommentThreadsController < ApplicationController
+class CommentThreadsController < BoardsBaseController
   before_action :redirect_unless_board
   before_action :redirect_unless_thread, only: [:show, :destroy]
   before_action :redirect_unless_daemon_or_board_admin, only: [:destroy]
 
   def show
-    @comments = @thread.comments.least_recent_first.all.decorate
-    @comment = @thread.comments.build
+    @comments = current_thread.comments.least_recent_first.all.decorate
+    @comment = current_thread.comments.build
     respond_to do |format|
       format.html
     end
@@ -33,7 +33,7 @@ class CommentThreadsController < ApplicationController
   end
 
   def destroy
-    if @thread.destroy
+    if current_thread.destroy
       redirect_to board_url(current_board), notice: "Thread #{params[:id]} destroyed", status: :see_other
     else
       render 'show', status: :unprocessable_entity, alert: "Problem deleting #{params[:id]}"
@@ -43,29 +43,14 @@ class CommentThreadsController < ApplicationController
   private
 
   def comment_thread_params
-    if has_roles?(user: :daemon, board: :admin)
+    if roles?(user: :daemon, board: :admin)
       params.permit(comment_thread: [:sticky], comment: [:content, :image])
     else
       params.permit(comment: [:content, :image])
     end
   end
 
-  def redirect_unless_daemon_or_board_admin
-    unauthorized! unless has_roles?(user: :daemon, board: :admin)
-  end
-
-  def redirect_unless_board
-    return if current_board
-
-    flash[:danger] = CGI.escapeHTML("Unknown board /#{params[:board_short_name]}/")
-    redirect_to boards_url
-  end
-
-  def redirect_unless_thread
-    @thread = current_board.threads.find_by(id: params[:id])&.decorate
-    return if @thread
-
-    flash[:danger] = CGI.escapeHTML("Unknown thread #{params[:id]}")
-    redirect_to board_url(current_board)
+  def current_thread
+    @thread = current_board&.threads&.find(params[:id])&.decorate
   end
 end

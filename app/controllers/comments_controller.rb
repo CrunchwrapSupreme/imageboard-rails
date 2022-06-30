@@ -1,38 +1,39 @@
-class CommentsController < ApplicationController
+class CommentsController < BoardsBaseController
   before_action :redirect_unless_board, only: [:create]
   before_action :redirect_unless_thread, only: [:create]
   before_action :redirect_unless_comment, only: [:destroy]
 
   def destroy
-    @thread = @comment.comment_thread
-    @board = @thread.board
+    current_thread = @comment.comment_thread
+    @board = current_thread.board
 
-    unless (users_comment?(@comment) || has_roles?(user: :daemon, board: :moderator)) && !@comment.first_comment?
-      redirect_to board_url(@board), alert: 'Unauthorized', status: :see_other
+    unless (users_comment?(@comment) || roles?(user: :daemon, board: :moderator)) && !@comment.first_comment?
+      redirect_to board_url(current_board), alert: 'Unauthorized', status: :see_other
       return
     end
 
     if @comment.destroy
-      redirect_to board_comment_thread_url(@board, @thread), notice: 'Comment deleted', status: :see_other
+      redirect_to board_comment_thread_url(current_board, current_thread), notice: 'Comment deleted', status: :see_other
     else
-      redirect_to board_url(@board), alert: 'Something went wrong', status: :see_other
+      redirect_to board_url(current_board), alert: 'Something went wrong', status: :see_other
     end
   end
 
   def create
     param = params.require(:comment).permit(:content, :image)
     result = CommentBuilder.call(user: current_user,
-                                 thread: @thread,
+                                 thread: current_thread,
                                  anon_name: current_anon_name,
-                                 board: @board,
+                                 board: current_board,
                                  content: param[:content],
                                  image: param[:image])
 
     if result.success?
-      redirect_to board_comment_thread_path(@board, @thread), notice: 'Comment created succesfully'
+      redirect_to board_comment_thread_path(current_board, current_thread), notice: 'Comment created succesfully'
     else
       @comment = result.comment.decorate
-      @threads = @board.threads.feed.decorate
+      @threads = current_board.threads.feed.decorate
+      @comments = current_thread.comments.least_recent_first.all.decorate
       render 'comment_threads/show', status: :unprocessable_entity, alert: 'Comment failed to create'
     end
   end
@@ -43,20 +44,10 @@ class CommentsController < ApplicationController
     @comment = Comment.find(params[:id])&.decorate
     return if @comment
 
-    redirect_to board_comment_thread_path(@board, @thread), alert: 'Unknown comment'
+    redirect_to board_comment_thread_path(current_board, current_thread), alert: 'Unknown comment'
   end
 
-  def redirect_unless_board
-    @board = Board.find_by(short_name: params[:board_short_name].downcase)&.decorate
-    return if @board
-
-    redirect_to boards_url, alert: "Unknown board /#{params[:board_short_name]}/"
-  end
-
-  def redirect_unless_thread
-    @thread = @board.threads.find(params[:comment_thread_id])&.decorate
-    return if @thread
-
-    redirect_to board_url(@board), alert: "Unknown thread #{params[:comment_thread_id]}"
+  def current_thread
+    @thread ||= current_board.threads.find(params[:comment_thread_id])&.decorate
   end
 end

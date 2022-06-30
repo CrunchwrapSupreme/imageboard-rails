@@ -6,7 +6,7 @@ class CommentBuilder
       context.thread.touch if context.thread.persisted?
       context.thread.save!
       context.comment = context.thread.comments.build(build_comment_attribs)
-      context.comment.image_derivatives!
+      context.comment.image_derivatives! if context.comment.image
       context.comment.save!
     end
   rescue ActiveRecord::RecordInvalid => e

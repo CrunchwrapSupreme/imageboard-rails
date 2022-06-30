@@ -1,18 +1,15 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_anon_name, :users_comment?
+  protect_from_forgery with: :exception
+  helper_method :users_comment?
 
   protected
 
   def users_comment?(comment)
-    if comment.anonymous?
-      comment.anon_name.eql?(current_anon_name)
-    else
+    if current_user
       comment.user.eql?(current_user)
+    else
+      false
     end
-  end
-
-  def has_roles?(user:, board:)
-    current_user&.min_role?(user) || current_board&.min_role?(current_user, board)
   end
 
   def current_anon_name
@@ -38,12 +35,29 @@ class ApplicationController < ActionController::Base
     unauthorized!
   end
 
-  def current_board
-    @board ||= Board.find_by(short_name: params[:board_short_name].downcase || params[:short_name].downcase)&.decorate
+  def unauthorized!
+    redirect_to root_url, alert: 'Unauthorized'
   end
 
-  def unauthorized!
-    byebug
-    redirect_to root_url, alert: 'Unauthorized'
+  def current_board
+    board_short_name = params[:board_short_name]&.downcase
+    board_short_name ||= params[:short_name]&.downcase
+    @board ||= Board.find_by(short_name: board_short_name)&.decorate
+  end
+
+  def roles?(user:, board:)
+    current_user&.min_role?(user) || current_board&.min_role?(current_user, board)
+  end
+
+  def require_daemon_or_board_mod
+    unauthorized! unless roles?(user: :daemon, board: :moderator)
+  end
+
+  def require_daemon_or_board_owner
+    unauthorized! unless roles?(user: :daemon, board: :owner)
+  end
+
+  def redirect_unless_daemon_or_board_admin
+    unauthorized! unless roles?(user: :daemon, board: :admin)
   end
 end

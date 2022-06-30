@@ -1,4 +1,4 @@
-class BoardsController < ApplicationController
+class BoardsController < BoardsBaseController
   before_action :redirect_unless_board,         only: [:edit, :show, :update, :destroy]
   before_action :authenticate_user!,            only: [:edit, :destroy, :create, :update, :new]
   before_action :require_daemon_or_board_mod,   only: [:edit, :update]
@@ -25,34 +25,34 @@ class BoardsController < ApplicationController
   end
 
   def show
-    @new_thread = @board.threads.build
+    @new_thread = current_board.threads.build
     @new_comment = @new_thread.comments.build
-    @threads = @board.threads.feed.decorate
+    @threads = current_board.threads.feed.decorate
     respond_to do |format|
       format.html
-      format.json { render json: @board.to_json }
+      format.json { render json: current_board.to_json }
     end
   end
 
   def create
     @board = Board.new(board_params).decorate
-    if @board.save
-      redirect_to board_url(@board), notice: 'Successfully created board'
+    if current_board.save
+      redirect_to board_url(current_board), notice: 'Successfully created board'
     else
       render 'new', status: :unprocessable_entity, alert: 'Invalid board settings'
     end
   end
 
   def update
-    if @board.update(update_params)
-      redirect_to board_url(@board), notice: 'Successfully updated board'
+    if current_board.update(update_params)
+      redirect_to board_url(current_board), notice: 'Successfully updated board'
     else
       render 'edit', status: :unprocessable_entity, alert: 'Invalid board settings'
     end
   end
 
   def destroy
-    @board.destroy
+    current_board.destroy
     redirect_to boards_url, notice: 'Board deleted', status: :see_other
   end
 
@@ -64,25 +64,5 @@ class BoardsController < ApplicationController
 
   def update_params
     params.require(:board).permit(:name, :description)
-  end
-
-  def redirect_unless_board
-    @board = Board.find_by(short_name: params[:short_name].downcase)&.decorate
-    return if @board
-
-    flash[:danger] = CGI.escapeHTML("Unknown board /#{params[:short_name]}/")
-    redirect_to boards_url
-  end
-
-  def require_daemon_or_board_mod
-    return if current_user&.min_role?(:daemon) || @board.min_role?(current_user, :moderator)
-
-    unauthorized!
-  end
-
-  def require_daemon_or_board_owner
-    return if current_user&.min_role?(:daemon) || @board.min_role?(current_user, :owner)
-
-    unauthorized!
   end
 end
