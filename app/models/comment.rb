@@ -7,6 +7,15 @@ class Comment < ApplicationRecord
   validates :comment_thread_id, presence: true
   validates :user_id, presence: true, if: -> { anonymous == false }
 
+  before_validation do
+    self.content = content.strip
+    if anonymous?
+      self.user_id = nil
+    else
+      self.anon_name = nil
+    end
+  end
+
   belongs_to :comment_thread, touch: true, counter_cache: true
   belongs_to :user, optional: true
 

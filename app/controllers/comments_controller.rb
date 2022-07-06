@@ -24,7 +24,6 @@ class CommentsController < BoardsBaseController
     result = CommentBuilder.call(user: current_user,
                                  thread: current_thread,
                                  anon_name: current_anon_name,
-                                 board: current_board,
                                  content: param[:content],
                                  image: param[:image])
 

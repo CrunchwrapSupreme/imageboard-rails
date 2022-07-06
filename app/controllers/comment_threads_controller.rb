@@ -17,7 +17,6 @@ class CommentThreadsController < BoardsBaseController
     result = CommentBuilder.call(user: current_user,
                                  thread: thread,
                                  anon_name: current_anon_name,
-                                 board: current_board,
                                  content: c_params.dig(:comment, :content),
                                  image: c_params.dig(:comment, :image))
 

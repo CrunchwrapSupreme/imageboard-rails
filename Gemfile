@@ -40,6 +40,7 @@ gem 'bootsnap', require: false
 # gem "sassc-rails"
 
 gem 'image_processing', '~> 1.8'
+gem 'fastimage'
 gem 'tailwindcss-rails'
 gem 'haml-rails'
 gem 'devise'

@@ -8,7 +8,14 @@ module BoardsHelper
   end
 
   def thumbnail_for(comment:, board:)
-    content = image_tag(comment.image(:medium).url, class: ['thumbnail']) if comment.image
+    if comment.image
+      url = comment.image(:medium)&.url
+      url ||= comment.image.url
+    end
+
+    url ||= 'test-pattern.webp'
+    content = image_tag(url, class: ['thumbnail'])
+
     content ||= "Thread #{comment.comment_thread.id}"
     thread_link(comment: comment, board: board, content: content, css: ['thumbnail'])
   end

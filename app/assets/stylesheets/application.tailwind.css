@@ -67,11 +67,15 @@
     }
 
     input[type="submit"] {
-        @apply drop-shadow-md bg-indigo-400 rounded px-3 py-2 hover:bg-indigo-300 hover:cursor-pointer;
+        @apply drop-shadow-md border border-black rounded px-2 py-1 hover:bg-gray-200 hover:cursor-pointer;
     }
 
     input[type="checkbox"] {
         @apply hover:cursor-pointer;
+    }
+
+    input[type="file"] {
+        @apply px-2 py-2;
     }
 
     code {
