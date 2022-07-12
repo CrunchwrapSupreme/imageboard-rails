@@ -2,6 +2,8 @@
   .px-4.flex.items-stretch.flex-col
     = thumbnail_for(comment: thread_thumbnail, board: board)
     %h3.text-xs #{pluralize(thread_thumbnail.comment_thread.comments.count, 'Reply')}
+    %h3.text-xs
+      = lock_or_unlock(thread: thread_thumbnail.comment_thread)
     %p.block.grow.px-4
       = thread_link(comment: thread_thumbnail, board: board, content: thread_thumbnail.abridged)
     .flex.flex-wrap.py-2

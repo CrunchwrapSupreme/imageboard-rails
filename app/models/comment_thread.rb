@@ -10,7 +10,17 @@ class CommentThread < ApplicationRecord
     self.bump_count += 1
   end
 
-  BUMP_LIMIT = 200
+  def lock
+    self.locked = true
+    save
+  end
+
+  def unlock
+    self.locked = false
+    save
+  end
+
+  BUMP_LIMIT = 100
   GALLERY_LIMIT = 50
 
   scope :most_recent_first, -> { order('created_at DESC') }

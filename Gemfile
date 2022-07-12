@@ -39,12 +39,14 @@ gem 'bootsnap', require: false
 # Use Sass to process CSS
 # gem "sassc-rails"
 
+gem 'font-awesome-rails'
 gem 'image_processing', '~> 1.8'
 gem 'fastimage'
 gem 'tailwindcss-rails'
 gem 'haml-rails'
 gem 'devise'
 gem 'draper'
+gem 'cancancan'
 gem 'recaptcha', require: 'recaptcha/rails'
 gem 'interactor-rails', '~> 2.0'
 gem 'shrine', '~> 3.0'

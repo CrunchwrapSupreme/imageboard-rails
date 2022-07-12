@@ -2,6 +2,8 @@ class CommentBuilder
   include Interactor
 
   def call
+    context.fail!(message: 'Cannot comment on locked thread') if context.thread.locked?
+
     CommentThread.transaction do
       context.thread.touch if context.thread.persisted?
       context.thread.save!
@@ -9,8 +11,8 @@ class CommentBuilder
       context.comment.image_derivatives! if context.comment.image
       context.comment.save!
     end
-  rescue ActiveRecord::RecordInvalid => e
-    context.fail!(error: e.message)
+  rescue ActiveRecord::RecordInvalid
+    context.fail!(message: 'Failed to create comment on thread')
   end
 
   def build_comment_attribs

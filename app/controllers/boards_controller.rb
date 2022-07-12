@@ -25,8 +25,8 @@ class BoardsController < BoardsBaseController
   end
 
   def show
-    @new_thread = current_board.threads.build
-    @new_comment = @new_thread.comments.build
+    @thread = current_board.threads.build
+    @comment = @thread.comments.build
     @threads = current_board.threads.feed.decorate
     respond_to do |format|
       format.html

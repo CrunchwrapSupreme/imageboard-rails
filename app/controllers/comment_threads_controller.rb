@@ -1,6 +1,6 @@
 class CommentThreadsController < BoardsBaseController
   before_action :redirect_unless_board
-  before_action :redirect_unless_thread, only: %i[show destroy]
+  before_action :redirect_unless_thread, only: %i[show destroy lock unlock]
   before_action :redirect_unless_daemon_or_board_admin, only: [:destroy]
 
   def show
@@ -23,11 +23,29 @@ class CommentThreadsController < BoardsBaseController
     if result.success?
       redirect_to board_comment_thread_url(current_board, result.thread), notice: 'Thread created succesfully'
     else
-      @new_thread = thread.decorate
-      @new_comment = result.comment.decorate
+      @thread = thread.decorate
+      @comment = result.comment.decorate
       @threads = current_board.threads.feed.decorate
       @board = current_board.decorate
-      render 'boards/show', status: :unprocessable_entity, alert: 'Thread failed to create'
+      render 'boards/show', status: :unprocessable_entity, alert: result.message
+    end
+  end
+
+  def unlock
+    if roles?(user: :daemon, board: :moderator)
+      current_thread.unlock
+      redirect_back_or_to board_url(current_board), notice: "Unlocked thread #{current_thread.id}"
+    else
+      redirect_to boards_url, status: :unprocessable_entity, alert: 'Not authorized to unlock thread'
+    end
+  end
+
+  def lock
+    if roles?(user: :daemon, board: :moderator)
+      current_thread.lock
+      redirect_back_or_to board_url(current_board), notice: "Locked thread #{current_thread.id}"
+    else
+      redirect_to boards_url, status: :unprocessable_entity, alert: 'Not authorized to lock thread'
     end
   end
 

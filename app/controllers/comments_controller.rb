@@ -33,7 +33,7 @@ class CommentsController < BoardsBaseController
       @comment = result.comment.decorate
       @threads = current_board.threads.feed.decorate
       @comments = current_thread.comments.least_recent_first.all.decorate
-      render 'comment_threads/show', status: :unprocessable_entity, alert: 'Comment failed to create'
+      render 'comment_threads/show', status: :unprocessable_entity, alert: result.message
     end
   end
 

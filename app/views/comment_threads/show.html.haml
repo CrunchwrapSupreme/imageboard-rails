@@ -3,6 +3,7 @@
   = link_to @board.slash_name, board_path(@board), class: ['form-link']
   Thread ##{@thread.id}
 %h2.text-center Replies: #{@comments.count}
-= new_comment_form(board: @board, thread: @thread, comment: @comment)
+- if !@thread.locked?
+  = new_comment_form(board: @board, thread: @thread, comment: @comment)
 .divide-y.px-20
   = render partial: 'comments/comment', collection: @comments, cached: true
