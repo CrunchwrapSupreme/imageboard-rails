@@ -334,6 +334,7 @@ DEPENDENCIES
   puma (~> 5.0)
   rails (~> 7.0.3)
   recaptcha
+  redis (~> 4.0)
   rspec-rails
   rubocop (~> 1.31)
   shrine (~> 3.0)

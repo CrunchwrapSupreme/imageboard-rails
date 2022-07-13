@@ -5,9 +5,11 @@ module CommentThreadsHelper
 
   def lock_or_unlock(thread:)
     if thread.locked?
-      link_to(fa_icon('unlock', text: 'Unlock'), unlock_board_comment_thread_path(thread.board, thread))
+      path = unlock_board_comment_thread_path(thread.board, thread)
+      link_to(fa_icon('unlock', text: 'Unlock'), path, data: { "turbo-method": :put })
     else
-      link_to(fa_icon('lock', text: 'Lock'), lock_board_comment_thread_path(thread.board, thread))
+      path = lock_board_comment_thread_path(thread.board, thread)
+      link_to(fa_icon('lock', text: 'Lock'), path, data: { "turbo-method": :put })
     end
   end
 end

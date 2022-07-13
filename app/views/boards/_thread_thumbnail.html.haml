@@ -3,6 +3,8 @@
     = thumbnail_for(comment: thread_thumbnail, board: board)
     %h3.text-xs #{pluralize(thread_thumbnail.comment_thread.comments.count, 'Reply')}
     %h3.text-xs
+      - if thread_thumbnail.comment_thread.sticky?
+        = fa_icon('bookmark')
       = lock_or_unlock(thread: thread_thumbnail.comment_thread)
     %p.block.grow.px-4
       = thread_link(comment: thread_thumbnail, board: board, content: thread_thumbnail.abridged)

@@ -28,6 +28,7 @@ class BoardsController < BoardsBaseController
     @thread = current_board.threads.build
     @comment = @thread.comments.build
     @threads = current_board.threads.feed.decorate
+    @board = current_board.decorate
     respond_to do |format|
       format.html
       format.json { render json: current_board.to_json }

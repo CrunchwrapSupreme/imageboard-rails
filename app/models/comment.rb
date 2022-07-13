@@ -7,6 +7,8 @@ class Comment < ApplicationRecord
   validates :comment_thread_id, presence: true
   validates :user_id, presence: true, if: -> { anonymous == false }
 
+  after_destroy_commit { broadcast_remove_to([comment_thread, :comments]) }
+
   before_validation do
     self.content = content.strip
     if anonymous?
@@ -24,5 +26,13 @@ class Comment < ApplicationRecord
 
   def first_comment?
     comment_thread.comments.first.eql?(self) || comment_thread.comments.empty?
+  end
+
+  def username
+    if anonymous?
+      "Anon #{anon_name}"
+    else
+      "u/#{user.username}"
+    end
   end
 end

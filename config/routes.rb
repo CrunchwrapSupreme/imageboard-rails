@@ -5,8 +5,8 @@ Rails.application.routes.draw do
     resources :comment_threads, only: %i[show create destroy], path: 'threads' do
       shallow { resources :comments, only: %i[destroy create] }
       member do
-        get :lock
-        get :unlock
+        put :lock
+        put :unlock
       end
     end
   end

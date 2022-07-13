@@ -2,8 +2,16 @@
 %h1.text-center
   = link_to @board.slash_name, board_path(@board), class: ['form-link']
   Thread ##{@thread.id}
-%h2.text-center Replies: #{@comments.count}
-- if !@thread.locked?
+%h2.text-center
+  Replies: #{@comments.count}
+  - if can?(:lock_thread, @board.object)
+    = lock_or_unlock(thread: @thread.object)
+- if @thread.locked?
+  %h2.text-center.text-emerald-300
+    Thread Locked
+- else
   = new_comment_form(board: @board, thread: @thread, comment: @comment)
 .divide-y.px-20
-  = render partial: 'comments/comment', collection: @comments, cached: true
+  = turbo_stream_from [@thread, :comments]
+  = turbo_frame_tag [@thread, :comments] do
+    = render partial: 'comments/comment', collection: @comments, cached: true

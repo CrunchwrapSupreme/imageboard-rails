@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def users_comment?(comment)
-    if current_user
+    if !comment.anonymous?
       comment.user.eql?(current_user)
     else
       false
@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
   def current_board
     board_short_name = params[:board_short_name]&.downcase
     board_short_name ||= params[:short_name]&.downcase
-    @board ||= Board.find_by(short_name: board_short_name)&.decorate
+    @board ||= Board.find_by(short_name: board_short_name)
   end
 
   def roles?(user:, board:)

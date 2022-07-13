@@ -6,6 +6,8 @@ class Board < ApplicationRecord
   validates :description, length: { maximum: 128 }
 
   has_many :threads, class_name: 'CommentThread', dependent: :destroy
+  has_many :board_roles, class_name: 'BoardRole', dependent: :destroy
+  has_many :users, through: :board_roles
 
   default_scope { order('short_name DESC') }
 
