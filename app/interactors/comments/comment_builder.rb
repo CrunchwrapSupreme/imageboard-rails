@@ -1,9 +1,7 @@
-class CommentBuilder
+class Comments::CommentBuilder
   include Interactor
 
   def call
-    context.fail!(message: 'Cannot comment on locked thread') if context.thread.locked?
-
     CommentThread.transaction do
       context.thread.touch if context.thread.persisted?
       context.thread.save!

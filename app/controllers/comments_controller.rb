@@ -21,11 +21,11 @@ class CommentsController < BoardsBaseController
 
   def create
     param = params.require(:comment).permit(:content, :image)
-    result = CommentBuilder.call(user: current_user,
-                                 thread: current_thread,
-                                 anon_name: current_anon_name,
-                                 content: param[:content],
-                                 image: param[:image])
+    result = Comments::PostComment.call(user: current_user,
+                                        thread: current_thread,
+                                        anon_name: current_anon_name,
+                                        content: param[:content],
+                                        image: param[:image])
 
     if result.success?
       redirect_to board_comment_thread_path(current_board, current_thread), notice: 'Comment created succesfully'

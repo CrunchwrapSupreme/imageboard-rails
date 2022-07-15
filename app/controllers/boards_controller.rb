@@ -24,7 +24,8 @@ class BoardsController < BoardsBaseController
     end
   end
 
-  def show
+  def show    
+    @current_ability ||= ThreadAbility.new(current_user)
     @thread = current_board.threads.build
     @comment = @thread.comments.build
     @threads = current_board.threads.feed.decorate

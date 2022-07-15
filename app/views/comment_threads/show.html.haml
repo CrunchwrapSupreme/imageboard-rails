@@ -4,8 +4,7 @@
   Thread ##{@thread.id}
 %h2.text-center
   Replies: #{@comments.count}
-  - if can?(:lock_thread, @board.object)
-    = lock_or_unlock(thread: @thread.object)
+  = lock_or_unlock(thread: @thread.object, authorized: can?(:lock_thread, @board.object))
 - if @thread.locked?
   %h2.text-center.text-emerald-300
     Thread Locked
