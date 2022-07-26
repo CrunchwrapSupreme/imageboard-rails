@@ -5,6 +5,10 @@ class CommentThread < ApplicationRecord
 
   belongs_to :board
 
+  before_commit do
+    self.sticky = false if sticky.nil?
+  end
+
   after_touch do
     self.last_bump = Time.current if bump_count < BUMP_LIMIT
     self.bump_count += 1

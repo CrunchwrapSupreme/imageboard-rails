@@ -4,14 +4,17 @@ module CommentThreadsHelper
   end
 
   def lock_or_unlock(thread:, authorized: false)
-    suffix = authorized ? '' : 'ed'
+    return fa_icon('lock') if thread.locked? && !authorized
+
     if thread.locked?
+      text = 'Unlock'
       path = unlock_board_comment_thread_path(thread.board, thread)
-      icon = fa_icon('unlock', text: "Unlock#{suffix}")
+      icon = fa_icon('lock', text: text)
     else
+      text = 'Lock'
       path = lock_board_comment_thread_path(thread.board, thread)
-      icon = fa_icon('lock', text: "Lock#{suffix}")
+      icon = fa_icon('unlock', text: text)
     end
-    authorized ? link_to(icon, path, data: { "turbo-method": :put }) : icon
+    link_to(icon, path, data: { "turbo-method": :put })
   end
 end
