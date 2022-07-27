@@ -7,7 +7,7 @@ class CommentsController < BoardsBaseController
     current_thread = @comment.comment_thread
     @board = current_thread.board
 
-    unless (users_comment?(@comment) || roles?(user: :daemon, board: :moderator)) && !@comment.first_comment?
+    if @comment.first_comment? || cannot?(:destroy, @comment)
       redirect_to board_url(current_board), alert: 'Unauthorized', status: :see_other
       return
     end
@@ -30,7 +30,7 @@ class CommentsController < BoardsBaseController
     if result.success?
       redirect_to board_comment_thread_path(current_board, current_thread), notice: 'Comment created succesfully'
     else
-      @comment = result.comment.decorate
+      @comment = result.comment
       @threads = current_board.threads.feed.decorate
       @comments = current_thread.comments.least_recent_first.all.decorate
       render 'comment_threads/show', status: :unprocessable_entity, alert: result.message
@@ -40,13 +40,17 @@ class CommentsController < BoardsBaseController
   protected
 
   def redirect_unless_comment
-    @comment = Comment.find(params[:id])&.decorate
+    @comment = Comment.find(params[:id])
     return if @comment
 
     redirect_to board_comment_thread_path(current_board, current_thread), alert: 'Unknown comment'
   end
 
+  def current_ability
+    @current_ability ||= ThreadAbility.new(current_user)
+  end
+
   def current_thread
-    @thread ||= current_board.threads.find(params[:comment_thread_id])&.decorate
+    @thread ||= current_board.threads.find(params[:comment_thread_id])
   end
 end

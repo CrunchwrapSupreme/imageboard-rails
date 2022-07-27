@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_06_185256) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_26_201118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -43,7 +43,9 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_06_185256) do
     t.bigint "board_id", null: false
     t.integer "comments_count"
     t.boolean "locked"
+    t.boolean "hidden", default: false
     t.index ["board_id"], name: "index_comment_threads_on_board_id"
+    t.index ["hidden"], name: "index_comment_threads_on_hidden"
     t.index ["last_bump"], name: "index_comment_threads_on_last_bump"
   end
 

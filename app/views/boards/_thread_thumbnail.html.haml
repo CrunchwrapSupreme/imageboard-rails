@@ -5,7 +5,7 @@
     %h3.text-xs
       - if thread_thumbnail.comment_thread.sticky?
         = fa_icon('bookmark')
-      = lock_or_unlock(thread: thread_thumbnail.comment_thread, authorized: can?(:lock_thread, board.object))
+      = lock_or_unlock(thread: thread_thumbnail.comment_thread, authorized: can?(:lock, thread_thumbnail.comment_thread))
 
     %p.block.grow.px-4
       = thread_link(comment: thread_thumbnail, board: board, content: thread_thumbnail.abridged)

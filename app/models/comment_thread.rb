@@ -6,6 +6,7 @@ class CommentThread < ApplicationRecord
   belongs_to :board
 
   before_commit do
+    self.hidden = false if hidden.nil?
     self.sticky = false if sticky.nil?
   end
 
@@ -29,5 +30,5 @@ class CommentThread < ApplicationRecord
 
   scope :most_recent_first, -> { order('created_at DESC') }
   scope :least_recent_first, -> { order('created_at ASC') }
-  scope :feed, -> { order('sticky DESC NULLS LAST, last_bump DESC NULLS LAST, created_at DESC').limit(GALLERY_LIMIT) }
+  scope :feed, -> { where.not(hidden: true).order('sticky DESC NULLS LAST, last_bump DESC NULLS LAST, created_at DESC').limit(GALLERY_LIMIT) }
 end

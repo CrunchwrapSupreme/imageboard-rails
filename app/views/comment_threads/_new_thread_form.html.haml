@@ -11,4 +11,7 @@
         = c_fields.hidden_field(:image, value: comment.cached_image_data) if comment.cached_image_data
         = c_fields.file_field :image
     .actions.inline-block
+      - if can?(:sticky, thread)
+        = f.label :sticky
+        = f.check_box :sticky
       = f.submit 'Submit'

@@ -2,23 +2,23 @@ class ThreadAbility
   include CanCan::Ability
 
   def initialize(user)
+    can :create, Comment, { comment_thread: { sticky: false, hidden: false, locked: false } }
+    can :read, CommentThread, hidden: false
+    can :create, CommentThread
     return unless user
-    
+
+    actions = %i[read sticky lock unlock destroy]
     if user.min_role?(:daemon)
-      can :create_sticky, Board
-      can :lock_thread, Board
-      can :unlock_thread, Board
-      can :destroy_thread, Board
-      can :comment_sticky, Board
-      can :comment_locked, Board
+      can actions, CommentThread
+      can [:create, :destroy], Comment
     else
-      query = { board_roles: { user_id: user.id, role: :moderator } }
-      can :create_sticky, Board, query
-      can :lock_thread, Board, query
-      can :unlock_thread, Board, query
-      can :destroy_thread, Board, query
-      can :comment_sticky, Board, query
-      can :comment_locked, Board, query
+      can actions, CommentThread do |thread|
+        thread.board.min_role?(user, :moderator)
+      end
+
+      can [:create, :destroy], Comment do |comment|
+        comment.comment_thread.board.min_role?(user, :moderator)
+      end
     end
   end
 end

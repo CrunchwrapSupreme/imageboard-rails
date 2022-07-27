@@ -1,8 +1,7 @@
 class CommentThreadsController < BoardsBaseController
   before_action :redirect_unless_board
   before_action :redirect_unless_thread, only: %i[show destroy lock unlock]
-  before_action :redirect_unless_daemon_or_board_admin, only: [:destroy]
-
+  
   def show
     @comments = current_thread.comments.least_recent_first.all.decorate
     @comment = current_thread.comments.build
@@ -18,7 +17,7 @@ class CommentThreadsController < BoardsBaseController
     if result.success?
       redirect_to board_comment_thread_url(current_board, result.thread), notice: 'Thread created succesfully'
     else
-      @thread = thread.decorate
+      @thread = result.thread
       @comment = result.comment.decorate
       @threads = current_board.threads.feed.decorate
       @board = current_board.decorate
@@ -26,8 +25,8 @@ class CommentThreadsController < BoardsBaseController
     end
   end
 
-  def unlock
-    if can?(:lock_thread, current_board)
+  def unlock    
+    if can?(:unlock, current_thread)
       current_thread.unlock
       redirect_back_or_to board_url(current_board), notice: "Unlocked thread #{current_thread.id}"
     else
@@ -36,7 +35,7 @@ class CommentThreadsController < BoardsBaseController
   end
 
   def lock
-    if can?(:lock_thread, current_board)
+    if can?(:lock, current_thread)
       current_thread.lock
       redirect_back_or_to board_url(current_board), notice: "Locked thread #{current_thread.id}"
     else
@@ -45,7 +44,7 @@ class CommentThreadsController < BoardsBaseController
   end
 
   def destroy
-    unless can?(:destroy_thread, current_board)
+    unless can?(:destroy, current_thread)
       redirect_to board_url(current_board), status: :see_other, alert: 'Unauthorized'
     end
 
@@ -59,11 +58,7 @@ class CommentThreadsController < BoardsBaseController
   private
 
   def create_params
-    if can?(:create_sticky, current_board)
-      params.permit(comment_thread: [:sticky], comment: %i[content image])
-    else
-      params.permit(comment: %i[content image])
-    end
+    params.permit(comment_thread: [:sticky], comment: %i[content image])
   end
 
   def current_ability
@@ -71,6 +66,6 @@ class CommentThreadsController < BoardsBaseController
   end
 
   def current_thread
-    @thread = current_board&.threads&.find(params[:id])&.decorate
+    @thread = current_board&.threads&.find(params[:id])
   end
 end
