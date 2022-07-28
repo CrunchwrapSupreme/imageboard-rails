@@ -8,7 +8,7 @@ RSpec.describe Comment, type: :model do
     expect(comment).to_not be_valid
   end
 
-  context 'validation' do
+  describe 'validation' do
     let(:comment) { build(:comment) }
     let(:thread) { create(:comment_thread) }
     let(:user) { create(:user) }

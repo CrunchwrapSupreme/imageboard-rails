@@ -7,6 +7,7 @@ class Comment < ApplicationRecord
   validates :comment_thread_id, presence: true
   validates :user_id, presence: true, if: -> { anonymous == false }
 
+  before_destroy { throw(:abort) if first_comment? }
   after_destroy_commit { broadcast_remove_to([comment_thread, :comments]) }
 
   before_validation do

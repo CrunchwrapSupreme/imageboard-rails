@@ -61,6 +61,8 @@ group :development, :test do
   gem 'pry-doc'
   gem 'rspec-rails'
   gem 'rubocop', '~> 1.31', require: false
+  gem 'spring-commands-rspec', require: false
+  gem 'shoulda-matchers', '~> 5.0'
 end
 
 group :development do

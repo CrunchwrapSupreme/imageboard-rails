@@ -4,5 +4,6 @@ FactoryBot.define do
     anonymous { true }
     anon_name { SecureRandom.hex(6) }
     association :comment_thread
+    image_data { TestData.image_data }
   end
 end

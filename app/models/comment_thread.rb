@@ -25,6 +25,16 @@ class CommentThread < ApplicationRecord
     save
   end
 
+  def hide
+    self.hidden = true
+    save
+  end
+
+  def unhide
+    self.hidden = false
+    save
+  end
+
   BUMP_LIMIT = 100
   GALLERY_LIMIT = 50
 

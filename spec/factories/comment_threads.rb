@@ -4,6 +4,7 @@ FactoryBot.define do
 
     after :create do |thread|
       create_list :comment, 3, comment_thread: thread
+      thread.reload
     end
 
     association :board
