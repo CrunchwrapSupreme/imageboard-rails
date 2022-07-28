@@ -6,7 +6,7 @@ class User < ApplicationRecord
 
   validates :role, presence: true
   validates :username, presence: true, length: { minimum: 1, maximum: 12 }
-  validates_format_of :username, with: /[\w\-]+/, message: 'must contain only digits, numbers, underscores, and -'
+  validates_format_of :username, with: /\A[\w\-]+\z/, message: 'must contain only digits, numbers, underscores, and -'
   validates_uniqueness_of :username, message: 'is already taken'
 
   has_many :board_roles, class_name: 'BoardRole', dependent: :destroy

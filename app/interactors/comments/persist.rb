@@ -1,23 +1,23 @@
 class Comments::Persist
   include Interactor
-  delegate :comment, :thread, :user, to: :context
+  delegate :comment, :thread, :user, :anon_name, to: :context
   delegate :cannot?, :can?, to: :ability
 
-  def call    
+  def call
     CommentThread.transaction do
-      thread.touch if thread.persisted?
-      thread.save!
+      thread.save! unless thread.persisted?
       context.comment = context.thread.comments.build(build_comment_attribs)
-      authorize_comment(context.comment)
+      authorize_comment(comment)
       comment.image_derivatives! if comment.image
       comment.save!
+      thread.save! if thread.changed?
     end
   rescue ActiveRecord::RecordInvalid
     context.fail!(message: 'Failed to create comment on thread')
   end
 
   def build_comment_attribs
-    comment_attribs = if context.user
+    comment_attribs = if user
                         {
                           user: user,
                           anonymous: false
@@ -25,7 +25,7 @@ class Comments::Persist
                       else
                         {
                           anonymous: true,
-                          anon_name: context.anon_name
+                          anon_name: anon_name
                         }
                       end
     context.params.require(:comment).merge(comment_attribs)

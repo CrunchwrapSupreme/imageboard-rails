@@ -5,13 +5,13 @@ class Comment < ApplicationRecord
   validates :content, length: { minimum: 3, maximum: 1024 }, presence: true
   validates :anon_name, presence: true, length: { is: 12 }, if: -> { anonymous == true }
   validates :comment_thread_id, presence: true
-  validates :user_id, presence: true, if: -> { anonymous == false }
+  validates :user_id, presence: true, if: -> { anonymous != true }
 
   before_destroy { throw(:abort) if first_comment? }
   after_destroy_commit { broadcast_remove_to([comment_thread, :comments]) }
 
   before_validation do
-    self.content = content.strip
+    self.content = content&.strip
     if anonymous?
       self.user_id = nil
     else
@@ -26,7 +26,8 @@ class Comment < ApplicationRecord
   scope :least_recent_first, -> { order('created_at ASC') }
 
   def first_comment?
-    comment_thread.comments.first.eql?(self) || comment_thread.comments.empty?
+    !comment_thread.nil? &&
+      (comment_thread.comments.least_recent_first.first.eql?(self) || comment_thread.comments.empty?)
   end
 
   def username

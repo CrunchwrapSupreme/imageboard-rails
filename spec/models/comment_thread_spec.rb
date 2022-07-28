@@ -2,28 +2,63 @@ require 'rails_helper'
 
 RSpec.describe CommentThread, type: :model do
   let(:board) { create(:board) }
-  let(:cthread) { create(:comment_thread, board_id: board.id) }
+  subject { create(:comment_thread, board_id: board.id) }
 
-  context 'scope' do
-    it 'should return an ordered feed' do
+  describe 'scope' do
+    it 'should scope to feed' do
       thread = create(:comment_thread, board_id: board.id)
       sticky_thread = create(:comment_thread, board_id: board.id, sticky: true)
       thread2 = create(:comment_thread, board_id: board.id)
-
       expect(board.threads.feed.all.map(&:id)).to eql([sticky_thread.id, thread2.id, thread.id])
+    end
+
+    it 'should scope to least_recent_first' do
+      thread = create(:comment_thread, board_id: board.id)
+      sticky_thread = create(:comment_thread, board_id: board.id, sticky: true)
+      thread2 = create(:comment_thread, board_id: board.id)
+      expect(board.threads.least_recent_first.all.map(&:id)).to eql([thread.id, sticky_thread.id, thread2.id])
+    end
+
+    it 'should scope to most_recent_first' do
+      thread = create(:comment_thread, board_id: board.id)
+      sticky_thread = create(:comment_thread, board_id: board.id, sticky: true)
+      thread2 = create(:comment_thread, board_id: board.id)
+      expect(board.threads.most_recent_first.all.map(&:id)).to eql([thread2.id, sticky_thread.id, thread.id])
     end
   end
 
   it 'should increase bump count on touch' do
-    last_count = cthread.bump_count
-    last_bump = cthread.last_bump
-    cthread.touch
-    expect(cthread.last_bump).not_to eql(last_bump)
-    expect(cthread.bump_count).to eql(last_count + 1)
+    last_count = subject.bump_count
+    last_bump = subject.last_bump
+    subject.touch
+    expect(subject.last_bump).not_to eql(last_bump)
+    expect(subject.bump_count).to eql(last_count + 1)
   end
 
-  it 'should not allow sticky to be nil' do
-    cthread.sticky = nil
-    expect(cthread).not_to be_valid
+  describe 'locked' do
+    it 'should #lock and persist' do
+      subject.lock
+      expect(subject.locked).to eql(true)
+    end
+
+    it 'should #unlock and persist' do
+      subject.unlock
+      expect(subject.locked).to eql(false)
+    end
   end
+
+  describe 'hide' do
+    it 'should #hide and persist' do
+      subject.hide
+      expect(subject.hidden).to eql(true)
+    end
+
+    it 'should #unhide and persist' do
+      subject.unhide
+      expect(subject.hidden).to eql(false)
+    end
+  end
+
+  it { should belong_to(:board) }
+  it { should have_many(:comments) }
 end

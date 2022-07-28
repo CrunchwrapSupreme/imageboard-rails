@@ -4,7 +4,8 @@ FactoryBot.define do
 
     after :create do |thread|
       create_list :comment, 3, comment_thread: thread
-      thread.reload
+      thread.bump_count = 3
+      thread.save
     end
 
     association :board
