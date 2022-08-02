@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   helper_method :users_comment?
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_back_or_to root_url, alert: exception.message
+    redirect_back_or_to root_url, alert: exception.message, status: :see_other
   end
 
   protected
