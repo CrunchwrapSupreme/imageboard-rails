@@ -17,4 +17,12 @@ class ImageUploader < Shrine
       medium: magick.resize_to_limit!(500, 500)
     }
   end
+
+  Attacher.promote_block do
+    PromoteJob.perform_async(self.class.name, record.class.name, record.id, name, file_data)
+  end
+
+  Attacher.destroy_block do
+    AttachmentDestroyJob.perform_async(self.class.name, data)
+  end
 end

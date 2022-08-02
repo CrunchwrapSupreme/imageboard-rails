@@ -41,7 +41,7 @@ class CommentThread < ApplicationRecord
   private
 
   def bump_thread(record)
-    self.touch
+    self.touch if self.persisted?
     self.bump_count ||= 0
     self.bump_count += 1
     self.last_bump = Time.current if bump_count < BUMP_LIMIT

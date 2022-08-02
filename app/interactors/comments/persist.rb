@@ -8,7 +8,6 @@ class Comments::Persist
       thread.save! unless thread.persisted?
       context.comment = context.thread.comments.build(build_comment_attribs)
       authorize_comment(comment)
-      comment.image_derivatives! if comment.image
       comment.save!
       thread.save! if thread.changed?
     end

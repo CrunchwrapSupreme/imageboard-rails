@@ -15,12 +15,12 @@ Shrine.storages = if Rails.env.test?
                   end
 
 Shrine.plugin :activerecord
+Shrine.plugin :backgrounding
 Shrine.plugin :cached_attachment_data # for retaining the cached file across form redisplays
 Shrine.plugin :restore_cached_data    # re-extract metadata when attaching a cached file
 Shrine.plugin :validation             # validation in uploader
 Shrine.plugin :validation_helpers
-Shrine.plugin :derivatives            # create thumbnails
+Shrine.plugin :derivatives, create_on_promote: true # create thumbnails
 Shrine.plugin :determine_mime_type
 Shrine.plugin :remove_invalid
-Shrine.plugin :restore_cached_data
 Shrine.plugin :store_dimensions
