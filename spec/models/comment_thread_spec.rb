@@ -27,10 +27,10 @@ RSpec.describe CommentThread, type: :model do
     end
   end
 
-  it 'should increase bump count on touch' do
+  it 'should increase bump count on comment add' do
     last_count = subject.bump_count
     last_bump = subject.last_bump
-    subject.touch
+    subject.comments << create(:comment, comment_thread: subject)
     expect(subject.last_bump).not_to eql(last_bump)
     expect(subject.bump_count).to eql(last_count + 1)
   end

@@ -10,5 +10,13 @@ FactoryBot.define do
       anonymous { false }
       association :user
     end
+
+    trait :cached_file do
+      image_data do
+        attacher = Shrine::Attacher.new
+        attacher.set(TestData.uploaded_image(:cache))
+        attacher.column_data
+      end
+    end
   end
 end

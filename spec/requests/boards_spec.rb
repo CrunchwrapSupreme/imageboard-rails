@@ -48,7 +48,7 @@ RSpec.describe BoardsController, type: :request do
       get edit_board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Unauthorized')
+      expect(response.body).to include('You are not authorized to access this page.')
     end
   end
 
@@ -73,7 +73,7 @@ RSpec.describe BoardsController, type: :request do
       get new_board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Unauthorized')
+      expect(response.body).to include('You are not authorized to access this page.')
     end
 
     it 'should be accessible by site daemons' do
@@ -91,7 +91,7 @@ RSpec.describe BoardsController, type: :request do
       post boards_url
       follow_redirect!
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Unauthorized')
+      expect(response.body).to include('You are not authorized to access this page.')
     end
 
     it 'should be accessible by site daemons' do
@@ -117,7 +117,7 @@ RSpec.describe BoardsController, type: :request do
       }
       follow_redirect!
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Unauthorized')
+      expect(response.body).to include('You are not authorized to access this page.')
     end
 
     it 'should be edited by board moderators' do
@@ -146,7 +146,7 @@ RSpec.describe BoardsController, type: :request do
       delete board_url(test_board)
       follow_redirect!
       expect(response).to have_http_status(:ok)
-      expect(response.body).to include('Unauthorized')
+      expect(response.body).to include('You are not authorized to access this page.')
     end
 
     it 'should be deleted by board owner' do

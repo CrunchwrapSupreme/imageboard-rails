@@ -19,7 +19,7 @@ class Comment < ApplicationRecord
     end
   end
 
-  belongs_to :comment_thread, touch: true, counter_cache: true
+  belongs_to :comment_thread, touch: true, counter_cache: :comments_count
   belongs_to :user, optional: true
 
   scope :most_recent_first, -> { order('created_at DESC') }

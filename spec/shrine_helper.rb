@@ -12,10 +12,10 @@ module TestData
     attacher.column_data
   end
 
-  def uploaded_image
+  def uploaded_image(type = :store)
     file = File.open(Rails.root.join('app', 'assets', 'images', 'test-pattern.webp'), binmode: true)
 
-    uploaded_file = Shrine.upload(file, :store, metadata: false)
+    uploaded_file = Shrine.upload(file, type, metadata: false)
     uploaded_file.metadata.merge!(
       'size' => File.size(file.path),
       'mime_type' => 'image/webp',
